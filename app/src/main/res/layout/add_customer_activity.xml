@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundcolor"
+    android:fitsSystemWindows="true">
+    <include layout="@layout/activity_title"/>
+
+    <LinearLayout
+        android:layout_marginTop="62dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/search_margin"
+        android:paddingRight="@dimen/search_margin"
+        android:background="@color/white"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            >
+            <TextView
+                android:layout_alignParentLeft="true"
+                android:textSize="@dimen/search_text_size"
+                android:layout_width="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_height="@dimen/search_text_height"
+                android:text="客户名称"
+                />
+            <EditText
+                android:id="@+id/ccompany"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/search_text_height"
+                android:background="@null"
+                android:textSize="@dimen/search_text_size"
+                android:hint="请输入客户名称"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ccompany"
+                >
+                <include layout="@layout/bottom_line"></include>
+            </LinearLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            >
+            <TextView
+                android:layout_alignParentLeft="true"
+                android:textSize="@dimen/search_text_size"
+                android:layout_width="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_height="@dimen/search_text_height"
+                android:text="联系人"
+                />
+            <EditText
+                android:id="@+id/cname"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/search_text_height"
+                android:textSize="@dimen/search_text_size"
+                android:gravity="center_vertical"
+                android:background="@null"
+                style="?android:attr/textViewStyle"
+                android:hint="请输入联系人"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cname"
+                >
+                <include layout="@layout/bottom_line"></include>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            >
+            <TextView
+                android:layout_alignParentLeft="true"
+                android:textSize="@dimen/search_text_size"
+                android:layout_width="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_height="@dimen/search_text_height"
+                android:text="联系电话"
+                />
+            <EditText
+                android:id="@+id/cphone"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/search_text_height"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/search_text_size"
+                android:inputType="textPhonetic"
+                android:textColorLink="@color/white"
+                android:maxLength="11"
+                style="?android:attr/textViewStyle"
+                android:hint="请输入联系电话"
+                />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

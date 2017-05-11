@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.project.leizu">
+
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.front" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".activity.LoginActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.AddCustomerActivity"></activity>
+        <activity android:name=".activity.UpdataCustomerActivity"></activity>
+        <activity android:name=".activity.CustomerRecordActivity"></activity>
+        <activity android:name=".activity.ContentActivtiy"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            ></activity>
+
+        <activity android:name=".activity.RegiesterActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            ></activity>
+
+        <provider
+            android:authorities="com.project.leizu.provider"
+            android:name=".contentprovider.LeiZuContentprovider"></provider>
+        
+    </application>
+
+</manifest>

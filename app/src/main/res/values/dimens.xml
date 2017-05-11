@@ -1,0 +1,92 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="title_icon">26dp</dimen>
+
+    <dimen name="title_lefticon_height">26dp</dimen>
+    <dimen name="title_lefticon_width">13dp</dimen>
+
+    <dimen name="customer_image_size">21dp</dimen>
+    <dimen name="customer_textview_height">42dp</dimen>
+    <dimen name="customer_button_margin_width">10dp</dimen>
+    <dimen name="customer_button_text_size">14sp</dimen>
+    <dimen name="customer_add_margin_width">10dp</dimen>
+    <dimen name="customer_record_item_textview_height">42dp</dimen>
+
+
+    <dimen name="search_margin">12dp</dimen>
+    <dimen name="search_text_height">42dp</dimen>
+    <dimen name="search_qrcode_size">48dp</dimen>
+    <dimen name="search_botton_text_size">14sp</dimen>
+    <dimen name="search_text_size">16sp</dimen>
+
+    <!--fa-->
+    <dimen name="margin_2">2dip</dimen>
+    <dimen name="margin_3">3dip</dimen>
+    <dimen name="margin_4">4dip</dimen>
+    <dimen name="margin_6">6dip</dimen>
+    <dimen name="margin_8">8dip</dimen>
+    <dimen name="margin_10">10dip</dimen>
+    <dimen name="margin_12">12dip</dimen>
+    <dimen name="margin_14">14dip</dimen>
+    <dimen name="margin_16">16dip</dimen>
+    <dimen name="margin_20">20dip</dimen>
+    <dimen name="margin_24">24dip</dimen>
+    <dimen name="margin_30">30dip</dimen>
+    <dimen name="margin_32">32dip</dimen>
+    <dimen name="margin_38">38dip</dimen>
+    <dimen name="margin_40">40dip</dimen>
+    <dimen name="margin_42">42dip</dimen>
+    <dimen name="margin_48">48dip</dimen>
+    <dimen name="margin_50">50dip</dimen>
+    <dimen name="margin_56">56dip</dimen>
+    <dimen name="margin_64">64dip</dimen>
+    <dimen name="margin_72">72dip</dimen>
+
+    <dimen name="icon_size_12">12dip</dimen>
+    <dimen name="icon_size_14">14dip</dimen>
+    <dimen name="icon_size_16">16dip</dimen>
+    <dimen name="icon_size_18">18dip</dimen>
+    <dimen name="icon_size_20">20dip</dimen>
+    <dimen name="icon_size_22">22dip</dimen>
+    <dimen name="icon_size_24">24dip</dimen>
+    <dimen name="icon_size_28">28dip</dimen>
+    <dimen name="icon_size_32">32dip</dimen>
+    <dimen name="icon_size_36">36dip</dimen>
+    <dimen name="icon_size_42">42dip</dimen>
+    <dimen name="icon_size_48">48dip</dimen>
+    <dimen name="icon_size_56">56dip</dimen>
+    <dimen name="icon_size_64">64dip</dimen>
+    <dimen name="icon_size_68">68dip</dimen>
+    <dimen name="icon_size_70">70dip</dimen>
+    <dimen name="icon_size_80">80dip</dimen>
+    <dimen name="icon_size_100">100dip</dimen>
+    <dimen name="icon_size_120">120dip</dimen>
+    <dimen name="icon_size_140">140dip</dimen>
+
+    <dimen name="item_40">40dip</dimen>
+    <dimen name="item_42">42dip</dimen>
+    <dimen name="item_48">48dip</dimen>
+    <dimen name="item_50">50dip</dimen>
+    <dimen name="item_52">52dip</dimen>
+    <dimen name="item_56">56dip</dimen>
+    <dimen name="item_64">64dip</dimen>
+    <dimen name="item_80">80dip</dimen>
+    <dimen name="item_144">144dip</dimen>
+    <dimen name="item_video">186dip</dimen>
+
+    <dimen name="text_size_12">12dip</dimen>
+    <dimen name="text_size_14">14dip</dimen>
+    <dimen name="text_size_15">15dip</dimen>
+    <dimen name="text_size_16">16dip</dimen>
+    <dimen name="text_size_17">17dip</dimen>
+    <dimen name="text_size_18">18dip</dimen>
+    <dimen name="text_size_20">20dip</dimen>
+    <dimen name="text_size_22">22dip</dimen>
+    <dimen name="text_size_24">24dip</dimen>
+
+
+
+</resources>

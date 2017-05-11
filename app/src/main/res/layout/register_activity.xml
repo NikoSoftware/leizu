@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+        <include layout="@layout/activity_title"/>
+
+        <TextView
+            android:id="@+id/tv_set_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_24"
+            android:layout_marginTop="@dimen/margin_16"
+            android:text="用户名"
+            android:textSize="@dimen/text_size_16"/>
+
+        <EditText
+            android:id="@+id/et_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_50"
+            android:layout_marginTop="@dimen/margin_16"
+            android:background="@drawable/shape_bg_text_normal"
+            android:gravity="center|left"
+            android:hint="请输入用户名"
+            android:maxLength="20"
+            android:paddingLeft="@dimen/margin_24"
+            android:singleLine="true"
+            android:textColorHint="@color/shallowgrey"
+            android:textSize="@dimen/text_size_16"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_24"
+            android:layout_marginTop="@dimen/margin_16"
+            android:text="密码"
+            android:textSize="@dimen/text_size_16"/>
+
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_50"
+            android:layout_marginTop="@dimen/margin_16"
+            android:background="@drawable/shape_bg_text_normal"
+            android:gravity="center|left"
+            android:hint="6-20位英文字母、数字或符号"
+            android:inputType="textPassword"
+            android:maxLength="20"
+            android:paddingLeft="@dimen/margin_24"
+            android:singleLine="true"
+            android:textColorHint="@color/shallowgrey"
+            android:textSize="@dimen/text_size_16"/>
+
+        <TextView
+            android:id="@+id/btn_done"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_50"
+            android:layout_marginLeft="@dimen/margin_24"
+            android:layout_marginRight="@dimen/margin_24"
+            android:layout_marginTop="@dimen/margin_30"
+            android:background="@drawable/selector_btn"
+            android:gravity="center"
+            android:text="注册"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_20"/>
+
+
+</LinearLayout>
