@@ -59,15 +59,12 @@ public class CustomerBorrowFrag extends Fragment {
     private CustomerBorrowAdapter adapter;
 
 
-    public CustomerBorrowFrag(Context context) {
-        this.context = context;
-    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewGroup = (LinearLayout)inflater.inflate(R.layout.customer_borrow_frag, container, false);
-
+        this.context = getActivity();
         InitRecyclerView();
         return viewGroup;
     }

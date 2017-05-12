@@ -67,15 +67,12 @@ public class SearchFrag extends Fragment {
     private EditText search_text;
 
 
-    public SearchFrag(Context context) {
-        this.context = context;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         viewGroup = (LinearLayout) inflater.inflate(R.layout.context_1, container, false);
+        this.context =getActivity();
         initTitle(viewGroup);
 
 

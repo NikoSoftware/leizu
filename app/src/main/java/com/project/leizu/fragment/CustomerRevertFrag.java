@@ -59,16 +59,12 @@ public class CustomerRevertFrag extends Fragment {
     private CustomerRevertAdapter adapter;
 
 
-    public CustomerRevertFrag(Context context) {
-        this.context = context;
-
-    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewGroup = (LinearLayout)inflater.inflate(R.layout.customer_revert_frag, container, false);
-
+        this.context =getActivity();
         InitRecyclerView();
         return viewGroup;
     }

@@ -76,8 +76,8 @@ public class CustomerRecordActivity extends AppCompatActivity {
 
         tabLayout =  (TabLayout)findViewById(R.id.TabLayout_title);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
-        fragments.add(new CustomerRevertFrag(CustomerRecordActivity.this));
-        fragments.add(new CustomerBorrowFrag(CustomerRecordActivity.this));
+        fragments.add(new CustomerRevertFrag());
+        fragments.add(new CustomerBorrowFrag());
 
         viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
         tabLayout.setupWithViewPager(viewPager);

@@ -158,7 +158,7 @@ public class ContentActivtiy extends BaseActivity implements View.OnClickListene
 
                 if(searchFrag==null){
 
-                    searchFrag = new SearchFrag(ContentActivtiy.this);
+                    searchFrag = new SearchFrag();
                     ft.add(R.id.frameLayout, searchFrag);
 
                 }else{
@@ -173,7 +173,7 @@ public class ContentActivtiy extends BaseActivity implements View.OnClickListene
 
                 if(customerFrag==null){
 
-                    customerFrag = new CustomerFrag(ContentActivtiy.this);
+                    customerFrag = new CustomerFrag();
                     ft.add(R.id.frameLayout, customerFrag);
                 }else{
                     ft.show(customerFrag);
