@@ -65,7 +65,7 @@ public class CustomerBorrowAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         NormalViewHolder viewholder = (NormalViewHolder) holder;
         final Record record = mList.get(position);
         viewholder.mGname.setText("名称："+record.getGname());
-        viewholder.mGid.setText("编号："+record.getGid());
+        viewholder.mGid.setText("编号："+record.getGid().getGid());
         viewholder.mRbtime.setText(Tool.getStringDate(record.getRbtime()));
         viewholder.mCname.setText("交接人："+record.getCname()+"");
         viewholder.mRstate.setText("状态："+(

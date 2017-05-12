@@ -47,7 +47,7 @@ public class Tool {
 
             Log.d("TAG===>", cursor.getString(cursor.getColumnIndex("Cname")));
             Customer customer = new Customer();
-            customer.setCid(cursor.getString(cursor.getColumnIndex("Cid")));
+         //   customer.setCid(cursor.getString(cursor.getColumnIndex("Cid")));
             customer.setCcompany(cursor.getString(cursor.getColumnIndex("Ccompany")));
             customer.setCname(cursor.getString(cursor.getColumnIndex("Cname")));
             customer.setCphone(cursor.getString(cursor.getColumnIndex("Cphone")));
@@ -65,8 +65,8 @@ public class Tool {
 
             Log.d("TAG===>", cursor.getString(cursor.getColumnIndex("Gname")));
             Record record = new Record();
-            record.setCid(cursor.getString(cursor.getColumnIndex("Cid")));
-            record.setGid(cursor.getString(cursor.getColumnIndex("Gid")));
+          //  record.setCid(cursor.getString(cursor.getColumnIndex("Cid")));
+          //  record.setGid(cursor.getString(cursor.getColumnIndex("Gid")));
             record.setGname(cursor.getString(cursor.getColumnIndex("Gname")));
             record.setCname(cursor.getString(cursor.getColumnIndex("Cname")));
             record.setRbtime(cursor.getLong(cursor.getColumnIndex("Rbtime")));

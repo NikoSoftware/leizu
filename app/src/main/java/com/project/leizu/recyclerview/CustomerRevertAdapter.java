@@ -66,7 +66,7 @@ public class CustomerRevertAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         NormalViewHolder viewholder = (NormalViewHolder) holder;
         Record record = mList.get(position);
         viewholder.mGname.setText("名称："+record.getGname());
-        viewholder.mGid.setText("编号："+record.getGid());
+        viewholder.mGid.setText("编号："+record.getGid().getGid());
         viewholder.mRbtime.setText(Tool.getStringDate(record.getRbtime()));
         viewholder.mCname.setText("交接人："+record.getCname()+"");
         viewholder.mRstate.setText("状态："+(
@@ -75,7 +75,7 @@ public class CustomerRevertAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         Bitmap bitmap=null;
         try {
 
-            bitmap= BitmapUtil.createQRCode(record.getGid(), DensityUtil.dip2px(mContext, 48));
+            bitmap= BitmapUtil.createQRCode(record.getGid().getGid(), DensityUtil.dip2px(mContext, 48));
         } catch (WriterException e) {
             e.printStackTrace();
         }

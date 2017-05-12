@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -13,15 +14,21 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.project.leizu.R;
+import com.project.leizu.base.Customer;
 import com.project.leizu.base.ObtainData;
+import com.project.leizu.util.StringUtil;
 import com.project.leizu.util.TitleBuilder;
 
 import java.util.regex.Pattern;
 
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
+
 /**
  * Created by Niko on 2016/7/15.
  */
-public class AddCustomerActivity extends Activity{
+public class AddCustomerActivity extends BaseActivity{
 
     private EditText ccompany;
     private EditText cname;
@@ -63,11 +70,13 @@ public class AddCustomerActivity extends Activity{
                         //数据为空震动
                         if(TextUtils.isEmpty(ccompany.getText().toString().trim())){
                             shakeAnimation(ccompany);
+                            return;
                         }
                         if(TextUtils.isEmpty(cname.getText().toString().trim())){
                             shakeAnimation(cname);
+                            return;
                         }
-                        if (!isMobile(cphone.getText().toString())) {
+                        if (!StringUtil.isPhoneNumber(cphone.getText().toString())) {
                             shakeAnimation(cphone);
                             return;
                         }
@@ -75,42 +84,49 @@ public class AddCustomerActivity extends Activity{
                         if (!TextUtils.isEmpty(ccompany.getText().toString().trim()) &&
                                 (!TextUtils.isEmpty(cname.getText().toString().trim()))) {
 
+/*
                             ContentValues values = new ContentValues();
                             values.put("Ccompany", ccompany.getText().toString().trim());
                             values.put("Cname", cname.getText().toString().trim());
                             values.put("Cphone", cphone.getText().toString().trim());
                             getContentResolver().insert(ObtainData.customerUri, values);
                             Toast.makeText(getBaseContext(), "插入成功", Toast.LENGTH_SHORT);
+*/
 
-                            finish();
+                            insertData();
                         }
-
                     }
                 });
 
-        cphone.addTextChangedListener(new TextWatcher(){
+    }
 
+
+    public void insertData(){
+
+        Customer customer = new Customer();
+        //注意：不能调用customer.setObjectId("")方法
+        customer.setCcompany(ccompany.getText().toString().trim());
+        customer.setCname(cname.getText().toString().trim());
+        customer.setCphone(cphone.getText().toString().trim());
+        customer.setUser(BmobUser.getCurrentUser());
+
+        customer.save(new SaveListener<String>() {
 
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-
+            public void done(String objectId, BmobException e) {
+                if(e==null){
+                    showSnackbar("创建客户成功");
+                    finish();
+                }else{
+                    showSnackbar("个人信息只能创建一次");
+                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                }
             }
         });
 
 
-
     }
+
 
 
     public void shakeAnimation(View view){

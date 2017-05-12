@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,13 +27,22 @@ import com.chanven.lib.cptr.loadmore.OnLoadMoreListener;
 import com.chanven.lib.cptr.recyclerview.RecyclerAdapterWithHF;
 import com.project.leizu.activity.AddCustomerActivity;
 import com.project.leizu.R;
+import com.project.leizu.activity.BaseActivity;
 import com.project.leizu.base.Customer;
+import com.project.leizu.base.Goods;
 import com.project.leizu.base.ObtainData;
 import com.project.leizu.recyclerview.CustomerAdapter;
 import com.project.leizu.util.TitleBuilder;
 import com.project.leizu.util.Tool;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 
 public class CustomerFrag extends Fragment {
@@ -41,7 +51,7 @@ public class CustomerFrag extends Fragment {
 	private LinearLayout viewGroup;
 	private RecyclerView mRecyclerView;
 	private CustomerAdapter adapter;
-	private ArrayList<Customer> list=null;
+	private ArrayList<Customer> list=new ArrayList<>();
 	private RecyclerAdapterWithHF mAdapter;
 	private PtrClassicFrameLayout mPtrFrame;
 
@@ -84,7 +94,7 @@ public class CustomerFrag extends Fragment {
 			ObtainData.insertCustomer(context,hashMap);
 
 		}*/
-		list = Tool.cursorCustomerToList(ObtainData.getCustomer(context, handler));
+	//	list = Tool.cursorCustomerToList(ObtainData.getCustomer(context, handler));
 
 		mRecyclerView = (RecyclerView) viewGroup.findViewById(R.id.rv_list);
 		LinearLayoutManager layoutManager = new LinearLayoutManager(context);
@@ -115,23 +125,8 @@ public class CustomerFrag extends Fragment {
 		mPtrFrame.setPtrHandler(new PtrDefaultHandler() {
 			@Override
 			public void onRefreshBegin(PtrFrameLayout frame) {
-				list.clear();
-//模拟数据
-				if(TextUtils.isEmpty(search_text.getText().toString().trim())) {
-					list.addAll(Tool.cursorCustomerToList(ObtainData.getCustomer(context, handler)));
-				}else{
-					list.addAll(Tool.cursorCustomerToList(ObtainData.getCustomerByFuzzy(context,
-							search_text.getText().toString())));
-				}
+				requestData();
 
-//模拟联网 延迟更新列表
-				new Handler().postDelayed(new Runnable() {
-					public void run() {
-						mAdapter.notifyDataSetChanged();
-						mPtrFrame.refreshComplete();
-					//	mPtrFrame.setLoadMoreEnable(true);
-					}
-				}, 1000);
 			}
 		});
 //上拉加载
@@ -153,7 +148,34 @@ public class CustomerFrag extends Fragment {
 		});
 
 
+		((BaseActivity) context).setCustomDialog();
+		requestData();
+
 	}
+
+
+	public void requestData(){
+		BmobQuery<Customer> query = new BmobQuery<Customer>();
+		query.addWhereEqualTo("user", BmobUser.getCurrentUser());
+		query.include("user");
+		query.findObjects(new FindListener<Customer>() {
+
+			@Override
+			public void done(List<Customer> customers, BmobException e) {
+				mPtrFrame.refreshComplete();
+				((BaseActivity) context).closeCustomDialog();
+				if (e == null) {
+					list.clear();
+					list.addAll(customers);
+					mAdapter.notifyDataSetChanged();
+				} else {
+					Log.i("bmob", "失败：" + e.getMessage());
+				}
+			}
+		});
+	}
+
+
 
 	private void initTitle(LinearLayout viewGroup) {
 

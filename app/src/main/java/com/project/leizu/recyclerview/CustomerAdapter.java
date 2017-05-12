@@ -84,8 +84,6 @@ public class CustomerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             public void onClick(View view) {
 
                 Intent intent = new Intent(mContext, CustomerRecordActivity.class);
-                intent.putExtra("Cid",customer.getCid());
-                intent.putExtra("Cname", customer.getCname());
                 mContext.startActivity(intent);
 
             }

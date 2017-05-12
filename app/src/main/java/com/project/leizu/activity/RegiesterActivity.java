@@ -15,11 +15,15 @@ import com.project.leizu.util.TitleBuilder;
 
 import java.util.HashMap;
 
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
+
 /**
  * Created by niko on 2017/3/18.
  */
 
-public class RegiesterActivity extends Activity {
+public class RegiesterActivity extends BaseActivity {
 
 
     private Context mContext;
@@ -54,11 +58,31 @@ public class RegiesterActivity extends Activity {
             public void onClick(View v) {
 
                 if(isCheck()){
-                    HashMap<String,String > hashMap = new HashMap<String, String>();
+/*                    HashMap<String,String > hashMap = new HashMap<String, String>();
 
                     hashMap.put("Aid", mEtName.getText().toString().trim());
                     hashMap.put("Apassword",mEtPassword.getText().toString().trim());
-                    ObtainData.insertAccounts(mContext,hashMap);
+                    ObtainData.insertAccounts(mContext,hashMap);*/
+                    setCustomDialog();
+                    BmobUser bu = new BmobUser();
+                    bu.setUsername(mEtName.getText().toString().trim());
+                    bu.setPassword(mEtPassword.getText().toString().trim());
+                    bu.signUp(new SaveListener<BmobUser>() {
+                        @Override
+                        public void done(BmobUser s, BmobException e) {
+                            closeCustomDialog();
+                            if(e==null){
+                                showSnackbar("注册成功");
+                                skip(mContext,ContentActivtiy.class);
+                                finish();
+                            }else{
+                                showSnackbar("注册失败");
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+
                     finish();
                 }
             }
@@ -78,13 +102,8 @@ public class RegiesterActivity extends Activity {
             return false;
         }
 
-
         return true;
     }
-
-
-
-
 
 
 

@@ -1,20 +1,32 @@
 package com.project.leizu.base;
 
+import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.BmobUser;
+
 /**
  * Created by Niko on 2016/7/15.
  */
-public class Customer {
+public class Customer extends BmobObject{
 
-    private String Cid;
+    private int Cid;
     private String Ccompany;
     private String Cname;
     private String Cphone;
+    private BmobUser user;
 
-    public String getCid() {
+    public BmobUser getUser() {
+        return user;
+    }
+
+    public void setUser(BmobUser user) {
+        this.user = user;
+    }
+
+    public int getCid() {
         return Cid;
     }
 
-    public void setCid(String cid) {
+    public void setCid(int cid) {
         Cid = cid;
     }
 

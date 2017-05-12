@@ -31,11 +31,19 @@ import com.project.leizu.util.Tool;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * Created by Niko on 2016/7/15.
  */
-public class ContentActivtiy extends Activity implements View.OnClickListener {
+public class ContentActivtiy extends BaseActivity implements View.OnClickListener {
 
     public ImageView button1;
     public ImageView button2;
@@ -53,7 +61,7 @@ public class ContentActivtiy extends Activity implements View.OnClickListener {
     private LinearLayout linear3;
     public static Customer customerFlag;
     public static boolean isBorrow=true;
-    private ArrayList<Goods> listGoods = null;
+    private ArrayList<Goods> listGoods = new ArrayList<>();
 
     //借出
     public static int BORROW=0;
@@ -230,11 +238,18 @@ public class ContentActivtiy extends Activity implements View.OnClickListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==RESULT_OK){
+        if (resultCode == RESULT_OK) {
 
             Bundle bundle = data.getExtras();
             String result = bundle.getString("result");
-            listGoods=Tool.cursorGoodsToList(ObtainData.getGoodsByGid(ContentActivtiy.this, result));
+            if (isBorrow) {
+                requestBorrowData(result);
+            } else {
+                requestRevoteData(result);
+            }
+
+
+     /*       listGoods=Tool.cursorGoodsToList(ObtainData.getGoodsByGid(ContentActivtiy.this, result));
 
             Log.d("listGoods:",listGoods.size()+"");
             if(listGoods!=null&&listGoods.size()!=0&&isBorrow){
@@ -273,9 +288,92 @@ Log.d("listRecord.size():",listRecord.size()+"");
                 Toast.makeText(ContentActivtiy.this, "未找到此商品信息", Toast.LENGTH_SHORT).show();
             }
 
-            }
+            }*/
 
-        customerFlag=null;
+         //   customerFlag = null;
+
+        }
+    }
+
+    /**
+     * 借阅数据
+     */
+    public void requestBorrowData(String bookid){
+
+        BmobQuery<Goods> query = new BmobQuery<Goods>();
+        query.addWhereEqualTo("Gid", bookid.trim());
+        query.findObjects(new FindListener<Goods>() {
+            @Override
+            public void done(List<Goods> goods, BmobException e) {
+                closeCustomDialog();
+                if (e == null&&goods.size()>0&&isBorrow) {
+                   Record record =  new Record();
+                    record.setCid(customerFlag);
+                    record.setCname(customerFlag.getCname());
+                    record.setGid(goods.get(0));
+                    record.setGname(goods.get(0).getGname());
+                    record.setRstate(BORROW);
+                    record.setRbtime(System.currentTimeMillis());
+
+                    record.save(new SaveListener<String>() {
+                        @Override
+                        public void done(String s, BmobException e) {
+                            if(e==null){
+                                showSnackbar("借阅成功");
+                            }else{
+                                Log.i("bmob", "借阅失败：" + e.getMessage());
+                                showSnackbar("借阅失败");
+                            }
+                        }
+                    });
+                } else {
+                    Log.i("bmob", "失败：" + e.getMessage());
+                }
+            }
+        });
 
     }
+
+
+    /**
+     * 归还数据
+     */
+    public void requestRevoteData(String bookid) {
+
+        BmobQuery<Record> query = new BmobQuery<Record>();
+
+        BmobQuery<Goods> goods = new BmobQuery<Goods>();
+        goods.addWhereEqualTo("Gid", bookid.trim());
+        query.addWhereMatchesQuery("Gid", "Goods", goods);
+        query.addWhereEqualTo("Rstate",ContentActivtiy.BORROW);
+        query.addWhereEqualTo("Cid",customerFlag);
+        query.findObjects(new FindListener<Record>() {
+            @Override
+            public void done(List<Record> records, BmobException e) {
+                closeCustomDialog();
+                if (e == null && records.size() > 0 && !isBorrow) {
+                    Record record =records.get(0);
+                    record.setRstate(REVERT);
+                    record.setRstime(System.currentTimeMillis());
+                    record.update(record.getObjectId(), new UpdateListener() {
+
+                        @Override
+                        public void done(BmobException e) {
+                            if(e==null){
+                                showSnackbar("归还成功");
+                            }else{
+                                Log.i("bmob","归还失败："+e.getMessage()+","+e.getErrorCode());
+                                showSnackbar("归还失败");
+                            }
+                        }
+                    });
+                }else if(e==null &&records.size()==0 ){
+                    showSnackbar("并未借阅此书籍");
+                } else {
+                    Log.i("bmob", "失败：" + e.getMessage());
+                }
+            }
+        });
+    }
+
 }

@@ -7,26 +7,44 @@
     <include layout="@layout/activity_title"/>
 
 <LinearLayout
+    android:id="@+id/line0"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
     android:gravity="center_vertical"
     android:orientation="vertical"
-    >
-<TextView
+    android:weightSum="1">
 
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/app_introduce"
-    android:textSize="@dimen/search_text_size"
-    />
+    <TextView
+
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_introduce"
+        android:textSize="@dimen/search_text_size" />
 
     <ImageView
         android:id="@+id/qcimage"
-        android:layout_width="50dp"
-        android:layout_height="50dp" />
+        android:layout_width="52dp"
+        android:layout_height="50dp"
+        android:layout_weight="0.12" />
+
+
+    <TextView
+        android:id="@+id/btn_login"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_50"
+        android:layout_below="@+id/qcimage"
+        android:layout_marginTop="@dimen/margin_30"
+        android:background="@drawable/selector_btn"
+        android:gravity="center"
+        android:text="退出登录"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_20"/>
 
 </LinearLayout>
+
+
 
 </RelativeLayout>

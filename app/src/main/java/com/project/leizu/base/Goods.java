@@ -1,9 +1,11 @@
 package com.project.leizu.base;
 
+import cn.bmob.v3.BmobObject;
+
 /**
  * Created by Niko on 2016/7/15.
  */
-public class Goods {
+public class Goods extends BmobObject {
 
     private String Gid;
     private String Gname;

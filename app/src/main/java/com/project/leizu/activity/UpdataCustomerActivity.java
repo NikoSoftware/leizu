@@ -1,11 +1,13 @@
 package com.project.leizu.activity;
 
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -13,15 +15,26 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.project.leizu.R;
+import com.project.leizu.base.Customer;
 import com.project.leizu.base.ObtainData;
+import com.project.leizu.base.Record;
+import com.project.leizu.util.StringUtil;
 import com.project.leizu.util.TitleBuilder;
 
+import java.util.List;
 import java.util.regex.Pattern;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * Created by Niko on 2016/7/15.
  */
-public class UpdataCustomerActivity extends Activity {
+public class UpdataCustomerActivity extends BaseActivity {
 
     private EditText ccompany;
     private EditText cname;
@@ -80,11 +93,13 @@ public class UpdataCustomerActivity extends Activity {
                         //数据为空震动
                         if (TextUtils.isEmpty(ccompany.getText().toString().trim())) {
                             shakeAnimation(ccompany);
+                            return;
                         }
                         if (TextUtils.isEmpty(cname.getText().toString().trim())) {
                             shakeAnimation(cname);
+                            return;
                         }
-                        if (!isMobile(cphone.getText().toString())) {
+                        if (!StringUtil.isPhoneNumber(cphone.getText().toString())) {
 
                             shakeAnimation(cphone);
                             return;
@@ -98,12 +113,12 @@ public class UpdataCustomerActivity extends Activity {
                        }
 
 
-
                            if (!TextUtils.isEmpty(company) &&
                                 (!TextUtils.isEmpty(name))
                                 && (!company.equals(Ccompany) || !name.equals(Cname) || !phone.equals(Cphone))
                                 ) {
-
+                               updataData();
+/*
                             ContentValues values = new ContentValues();
                             values.put("Cid", Cid);
                             values.put("Ccompany", company);
@@ -113,10 +128,55 @@ public class UpdataCustomerActivity extends Activity {
                             Toast.makeText(getBaseContext(), "插入成功", Toast.LENGTH_SHORT);
 
                             finish();
+*/
+
                         }
 
                     }
                 });
+
+    }
+
+
+
+    public void updataData(){
+
+        BmobQuery<Customer> query = new BmobQuery<Customer>();
+        query.addWhereEqualTo("user", BmobUser.getCurrentUser());
+
+        query.findObjects(new FindListener<Customer>() {
+
+            @Override
+            public void done(List<Customer> customers, BmobException e) {
+
+                if(e==null&&customers.size()>0) {
+
+                    Customer customer = customers.get(0);
+                    //注意：不能调用customer.setObjectId("")方法
+                    customer.setCcompany(ccompany.getText().toString().trim());
+                    customer.setCname(cname.getText().toString().trim());
+                    customer.setCphone(cphone.getText().toString().trim());
+                    customer.setUser(BmobUser.getCurrentUser());
+
+                    customer.update(customer.getObjectId(),new UpdateListener() {
+
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null) {
+                                showSnackbar("修改成功");
+                                finish();
+                            } else {
+                                Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
+                            }
+                        }
+                    });
+                }else{
+                    Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
+                }
+
+                }
+
+            });
 
     }
 

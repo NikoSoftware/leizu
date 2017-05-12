@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +19,23 @@ import com.chanven.lib.cptr.PtrDefaultHandler;
 import com.chanven.lib.cptr.PtrFrameLayout;
 import com.chanven.lib.cptr.loadmore.OnLoadMoreListener;
 import com.chanven.lib.cptr.recyclerview.RecyclerAdapterWithHF;
+import com.project.leizu.activity.BaseActivity;
 import com.project.leizu.activity.ContentActivtiy;
 import com.project.leizu.R;
+import com.project.leizu.activity.CustomerRecordActivity;
+import com.project.leizu.base.Customer;
 import com.project.leizu.base.ObtainData;
 import com.project.leizu.base.Record;
 import com.project.leizu.recyclerview.CustomerRevertAdapter;
 import com.project.leizu.util.Tool;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 /**
  * Created by Niko on 2016/7/15.
@@ -36,8 +46,6 @@ public class CustomerRevertFrag extends Fragment {
     private LinearLayout viewGroup;
     private RecyclerView mRecyclerView;
     private RecyclerAdapterWithHF mAdapter;
-    private String Cid;
-    private String Cname;
 
     Handler handler = new Handler(){
 
@@ -47,14 +55,13 @@ public class CustomerRevertFrag extends Fragment {
         }
     };
     private PtrClassicFrameLayout mPtrFrame;
-    private ArrayList<Record> list;
+    private ArrayList<Record> list = new ArrayList<>();
     private CustomerRevertAdapter adapter;
 
 
-    public CustomerRevertFrag(Context context, String Cid, String Cname) {
+    public CustomerRevertFrag(Context context) {
         this.context = context;
-        this.Cid = Cid;
-        this.Cname =Cname;
+
     }
 
     @Nullable
@@ -70,7 +77,7 @@ public class CustomerRevertFrag extends Fragment {
 
 
 
-        list = Tool.cursorRecordToList(ObtainData.getRecordRecordByCidAndRstate(context, handler, Cid, ContentActivtiy.REVERT + ""));
+//        list = Tool.cursorRecordToList(ObtainData.getRecordRecordByCidAndRstate(context, handler, Cid, ContentActivtiy.REVERT + ""));
        // list = Tool.cursorRecordToList(ObtainData.getRecord(context, handler));
         mRecyclerView = (RecyclerView) viewGroup.findViewById(R.id.rv_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
@@ -101,7 +108,9 @@ public class CustomerRevertFrag extends Fragment {
         mPtrFrame.setPtrHandler(new PtrDefaultHandler() {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-                list.clear();
+                requestData();
+
+/*                list.clear();
 
                 list.addAll(list = Tool.cursorRecordToList(
                         ObtainData.getRecordRecordByCidAndRstate(context, handler, Cid, ContentActivtiy.REVERT + "")));
@@ -113,7 +122,7 @@ public class CustomerRevertFrag extends Fragment {
                         mPtrFrame.refreshComplete();
                      //   mPtrFrame.setLoadMoreEnable(true);
                     }
-                }, 1000);
+                }, 1000);*/
             }
         });
 //上拉加载
@@ -134,7 +143,40 @@ public class CustomerRevertFrag extends Fragment {
             }
         });
 
+
+        ((CustomerRecordActivity) context).setCustomDialog();
+        requestData();
     }
+
+
+
+    public void requestData(){
+        BmobQuery<Record> query = new BmobQuery<Record>();
+
+        BmobQuery<Customer> customer = new BmobQuery<Customer>();
+        customer.addWhereEqualTo("user", BmobUser.getCurrentUser());
+        query.addWhereMatchesQuery("Cid","Customer",customer);
+        query.addWhereEqualTo("Rstate",ContentActivtiy.REVERT);
+        query.include("Cid,Gid");
+
+        query.order("-createdAt");
+        query.findObjects(new FindListener<Record>() {
+
+            @Override
+            public void done(List<Record> records, BmobException e) {
+                mPtrFrame.refreshComplete();
+                ((CustomerRecordActivity) context).closeCustomDialog();
+                if (e == null) {
+                    list.clear();
+                    list.addAll(records);
+                    mAdapter.notifyDataSetChanged();
+                } else {
+                    Log.i("bmob", "失败：" + e.getMessage());
+                }
+            }
+        });
+    }
+
 
     public int getCount(){
 

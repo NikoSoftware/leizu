@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/search_margin"
         android:background="@color/white"
+        android:visibility="gone"
         >
         <com.project.leizu.customcontrols.LineEditText
             android:id="@+id/search_text"

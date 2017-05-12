@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">嫘祖</string>
-    <string name="app_introduce">嫘祖是一款商品借还的软件，通过扫描二维码记录商品的借还，测试版本操作提示：
-        软件初始化商品编号：0001^0005 。借还商品需要用户扫描数据值为0001^0005的二维码，二维码生成请百度</string>
+    <string name="app_name">图书借阅软件</string>
+    <string name="app_introduce">图书借阅软件是一款书籍借还的软件，通过扫描二维码记录书籍的借还，测试版本操作提示：
+        软件初始化书籍编号：0001^0005 。借还书籍需要用户扫描数据值为0001^0005的二维码，二维码生成请百度</string>
 
 </resources>

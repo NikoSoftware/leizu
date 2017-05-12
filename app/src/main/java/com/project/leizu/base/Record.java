@@ -1,13 +1,17 @@
 package com.project.leizu.base;
 
+import java.io.Serializable;
+
+import cn.bmob.v3.BmobObject;
+
 /**
  * Created by Niko on 2016/7/15.
  */
-public class Record {
+public class Record extends BmobObject implements Serializable{
 
     private int Rid;
-    private String Gid;
-    private String Cid;
+    private Goods Gid;
+    private Customer Cid;
     private int Rstate;
     private Long Rbtime;
     private Long Rstime;
@@ -37,23 +41,6 @@ public class Record {
     public void setRid(int rid) {
         Rid = rid;
     }
-
-    public String getGid() {
-        return Gid;
-    }
-
-    public void setGid(String gid) {
-        Gid = gid;
-    }
-
-    public String getCid() {
-        return Cid;
-    }
-
-    public void setCid(String cid) {
-        Cid = cid;
-    }
-
     public int getRstate() {
         return Rstate;
     }
@@ -76,5 +63,21 @@ public class Record {
 
     public void setCname(String cname) {
         Cname = cname;
+    }
+
+    public Goods getGid() {
+        return Gid;
+    }
+
+    public void setGid(Goods gid) {
+        Gid = gid;
+    }
+
+    public Customer getCid() {
+        return Cid;
+    }
+
+    public void setCid(Customer cid) {
+        Cid = cid;
     }
 }

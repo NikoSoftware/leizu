@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import com.chanven.lib.cptr.PtrFrameLayout;
 import com.chanven.lib.cptr.loadmore.OnLoadMoreListener;
 import com.chanven.lib.cptr.recyclerview.RecyclerAdapterWithHF;
 import com.project.leizu.R;
+import com.project.leizu.activity.BaseActivity;
 import com.project.leizu.base.Goods;
 import com.project.leizu.base.ObtainData;
 import com.project.leizu.recyclerview.RvAdapter;
@@ -34,6 +36,12 @@ import com.project.leizu.util.Tool;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
 
 
 public class SearchFrag extends Fragment {
@@ -55,7 +63,7 @@ public class SearchFrag extends Fragment {
     private RecyclerAdapterWithHF mAdapter;
     private Context context;
     private LinearLayout viewGroup;
-    private ArrayList<Goods> list = null;
+    private ArrayList<Goods> list = new ArrayList<>();
     private EditText search_text;
 
 
@@ -70,23 +78,28 @@ public class SearchFrag extends Fragment {
         viewGroup = (LinearLayout) inflater.inflate(R.layout.context_1, container, false);
         initTitle(viewGroup);
 
+
+/*
         //初始化数据，如果数据库没有数据生成数据库数据
-        list = Tool.cursorGoodsToList(ObtainData.getGoods(context, handler));
         if (list.size() <= 0) {
             for (int i = 0; i < 5; i++) {
-                HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("Gid", "000" + (1 + i) + "");
-                hashMap.put("Gname", "第 000" + (i + 1) + " 号商品");
-                hashMap.put("Gform", "kus3hg");
-                hashMap.put("Gweight", 132 + "");
-                hashMap.put("Glenght", 120 + "");
-                hashMap.put("Gprice", 120.5 + i + "");
-                ObtainData.insertGoods(context, hashMap);
+                Goods goods = new Goods();
+                goods.setGid("000" + (1 + i) + "");
+                goods.setGname("第 000" + (i + 1) + " 号书籍");
+                goods.setGform("kus3hg" + i);
+                goods.setGweight(123 + "");
+                goods.setGlenght(20);
+                goods.setGprice(40 + (int) (Math.random() * 50));
+                goods.save(new SaveListener<String>() {
+                    @Override
+                    public void done(String s, BmobException e) {
+
+                    }
+                });
+
             }
-            list = Tool.cursorGoodsToList(ObtainData.getGoods(context, handler));
-
         }
-
+*/
 
         mRecyclerView = (RecyclerView) viewGroup.findViewById(R.id.rv_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
@@ -118,13 +131,14 @@ public class SearchFrag extends Fragment {
         mPtrFrame.setPtrHandler(new PtrDefaultHandler() {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-                list.clear();
                //seach为空进行所有搜索
                 if(TextUtils.isEmpty(search_text.getText().toString().trim())) {
-                    list.addAll(Tool.cursorGoodsToList(ObtainData.getGoods(context, handler)));
+                   // list.addAll(Tool.cursorGoodsToList(ObtainData.getGoods(context, handler)));
+                    requestData();
                 }else {
-                    list.addAll(Tool.cursorGoodsToList(ObtainData.getGoodsByFuzzy(context,
-                            search_text.getText().toString())));
+                    /*list.addAll(Tool.cursorGoodsToList(ObtainData.getGoodsByFuzzy(context,
+                            search_text.getText().toString())));*/
+                requestLikeData();
                 }
               //模拟联网 延迟更新列表
                 new Handler().postDelayed(new Runnable() {
@@ -133,7 +147,7 @@ public class SearchFrag extends Fragment {
                         mPtrFrame.refreshComplete();
 
                         //关闭上拉加载
-                     //   mPtrFrame.setLoadMoreEnable(true);
+                        //   mPtrFrame.setLoadMoreEnable(true);
                     }
                 }, 1000);
             }
@@ -161,8 +175,60 @@ public class SearchFrag extends Fragment {
         });
 
 
+        ((BaseActivity) context).setCustomDialog();
+        requestData();
         return viewGroup;
     }
+
+
+
+    public void requestData(){
+
+        BmobQuery<Goods> query = new BmobQuery<Goods>();
+        query.findObjects(new FindListener<Goods>() {
+
+            @Override
+            public void done(List<Goods> videoModels, BmobException e) {
+                mPtrFrame.refreshComplete();
+                ((BaseActivity) context).closeCustomDialog();
+                if (e == null) {
+                    list.clear();
+                    list.addAll(videoModels);
+                    mAdapter.notifyDataSetChanged();
+                } else {
+                    Log.i("bmob", "失败：" + e.getMessage());
+                }
+            }
+        });
+    }
+
+    public void requestLikeData(){
+
+
+        BmobQuery<Goods> query = new BmobQuery<Goods>();
+        query.addWhereContains("Gname",search_text.getText().toString());
+
+        query.findObjects(new FindListener<Goods>() {
+
+            @Override
+            public void done(List<Goods> videoModels, BmobException e) {
+                mPtrFrame.refreshComplete();
+                ((BaseActivity) context).closeCustomDialog();
+                if (e == null) {
+                    list.clear();
+                    list.addAll(videoModels);
+                    mAdapter.notifyDataSetChanged();
+                } else {
+                    Log.i("bmob", "失败：" + e.getMessage());
+                }
+            }
+        });
+
+
+    }
+
+
+
 
     private void initTitle(LinearLayout viewGroup) {
 
@@ -188,7 +254,7 @@ public class SearchFrag extends Fragment {
             @Override
             public void afterTextChanged(final Editable editable) {
 
-                new Handler().post(new Runnable() {
+/*                new Handler().post(new Runnable() {
                     @Override
                     public void run() {
                         list.clear();
@@ -196,7 +262,9 @@ public class SearchFrag extends Fragment {
                                 search_text.getText().toString())));
                         mAdapter.notifyDataSetChanged();
                     }
-                });
+                });*/
+
+                requestLikeData();
 
 
             }
