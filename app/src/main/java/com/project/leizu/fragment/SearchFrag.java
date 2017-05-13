@@ -65,6 +65,7 @@ public class SearchFrag extends Fragment {
     private LinearLayout viewGroup;
     private ArrayList<Goods> list = new ArrayList<>();
     private EditText search_text;
+    private ArrayList<Goods> listContain = new ArrayList<>();
 
 
     @Override
@@ -137,16 +138,7 @@ public class SearchFrag extends Fragment {
                             search_text.getText().toString())));*/
                 requestLikeData();
                 }
-              //模拟联网 延迟更新列表
-                new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        mAdapter.notifyDataSetChanged();
-                        mPtrFrame.refreshComplete();
 
-                        //关闭上拉加载
-                        //   mPtrFrame.setLoadMoreEnable(true);
-                    }
-                }, 1000);
             }
         });
 //上拉加载
@@ -191,6 +183,8 @@ public class SearchFrag extends Fragment {
                 if (e == null) {
                     list.clear();
                     list.addAll(videoModels);
+                    listContain.clear();
+                    listContain.addAll(videoModels);
                     mAdapter.notifyDataSetChanged();
                 } else {
                     Log.i("bmob", "失败：" + e.getMessage());
@@ -200,28 +194,23 @@ public class SearchFrag extends Fragment {
     }
 
     public void requestLikeData(){
+        String search = search_text.getText().toString();
 
-
-        BmobQuery<Goods> query = new BmobQuery<Goods>();
-        query.addWhereContains("Gname",search_text.getText().toString());
-
-        query.findObjects(new FindListener<Goods>() {
-
-            @Override
-            public void done(List<Goods> videoModels, BmobException e) {
-                mPtrFrame.refreshComplete();
-                ((BaseActivity) context).closeCustomDialog();
-                if (e == null) {
-                    list.clear();
-                    list.addAll(videoModels);
-                    mAdapter.notifyDataSetChanged();
-                } else {
-                    Log.i("bmob", "失败：" + e.getMessage());
+        if("".equals(search)){
+            list.clear();
+            list.addAll(listContain);
+            mAdapter.notifyDataSetChanged();
+        }else{
+            list.clear();
+            for (Goods good : listContain) {
+                if(good.getGname().contains(search)){
+                    list.add(good);
                 }
             }
-        });
+            mAdapter.notifyDataSetChanged();
+        }
 
-
+        mPtrFrame.refreshComplete();
     }
 
 
